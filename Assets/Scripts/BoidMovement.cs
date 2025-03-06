@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class BoidMovement : MonoBehaviour
 {
-    public float speed = 3f;
+    public float speed = 1.5f;
     public float neighborRadius = 2f;
     public float separationDistance = 1f;
     public float alignmentWeight = 1f;
@@ -14,7 +14,7 @@ public class BoidMovement : MonoBehaviour
 
     void Start()
     {
-        // Initialisation du mouvement vers le haut du prefab
+        // Initialisation du mouvement dans la direction du haut du prefab (l'avant)
         velocity = transform.up * speed;
     }
 
@@ -34,12 +34,12 @@ public class BoidMovement : MonoBehaviour
         velocity += acceleration * Time.deltaTime;
         velocity = velocity.normalized * speed;
 
-        // Déplacer le boid dans la direction de son "haut"
+        // Déplacer le boid dans la direction du mouvement
         transform.position += (Vector3)velocity * Time.deltaTime;
 
-        // Faire tourner le boid pour qu'il suive la direction du mouvement
+        // Faire tourner le boid pour que le haut (l'avant) suive la direction de déplacement
         float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, angle + 90f); // +90° pour aligner le "haut"
+        transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
     }
 
     List<BoidMovement> GetNeighbors()
@@ -57,7 +57,8 @@ public class BoidMovement : MonoBehaviour
     {
         if (neighbors.Count == 0) return Vector2.zero;
         Vector2 avgVelocity = Vector2.zero;
-        foreach (var neighbor in neighbors) avgVelocity += neighbor.velocity;
+        foreach (var neighbor in neighbors)
+            avgVelocity += neighbor.velocity;
         return (avgVelocity / neighbors.Count).normalized;
     }
 
@@ -65,7 +66,8 @@ public class BoidMovement : MonoBehaviour
     {
         if (neighbors.Count == 0) return Vector2.zero;
         Vector2 center = Vector2.zero;
-        foreach (var neighbor in neighbors) center += (Vector2)neighbor.transform.position;
+        foreach (var neighbor in neighbors)
+            center += (Vector2)neighbor.transform.position;
         return ((center / neighbors.Count) - (Vector2)transform.position).normalized;
     }
 
@@ -75,9 +77,7 @@ public class BoidMovement : MonoBehaviour
         foreach (var neighbor in neighbors)
         {
             if (Vector2.Distance(transform.position, neighbor.transform.position) < separationDistance)
-            {
                 separation += (Vector2)(transform.position - neighbor.transform.position);
-            }
         }
         return separation.normalized;
     }
