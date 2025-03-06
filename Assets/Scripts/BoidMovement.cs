@@ -10,6 +10,10 @@ public class BoidMovement : MonoBehaviour
     public float cohesionWeight = 1f;
     public float separationWeight = 1.5f;
 
+    // Boid settings
+    public bool IsDistanceInfluence = true;
+    /// Determines whether the distance to neighboring boids is taken into account
+    /// when calculating the influence of alignment, cohesion, and separation.
     private Vector2 velocity;
 
     void Start()
@@ -57,7 +61,18 @@ public class BoidMovement : MonoBehaviour
     {
         if (neighbors.Count == 0) return Vector2.zero;
         Vector2 avgVelocity = Vector2.zero;
-        foreach (var neighbor in neighbors) avgVelocity += neighbor.velocity;
+        foreach (var neighbor in neighbors)
+        {
+            if (IsDistanceInfluence)
+            {
+                float distance = Vector2.Distance(transform.position, neighbor.transform.position);
+                avgVelocity += neighbor.velocity / distance;
+            }
+            else
+            {
+                avgVelocity += neighbor.velocity;
+            }
+        }
         return (avgVelocity / neighbors.Count).normalized;
     }
 
@@ -65,7 +80,19 @@ public class BoidMovement : MonoBehaviour
     {
         if (neighbors.Count == 0) return Vector2.zero;
         Vector2 center = Vector2.zero;
-        foreach (var neighbor in neighbors) center += (Vector2)neighbor.transform.position;
+        foreach (var neighbor in neighbors)
+        {
+            if (IsDistanceInfluence)
+            {
+                float distance = Vector2.Distance(transform.position, neighbor.transform.position);
+                center += (Vector2)neighbor.transform.position / distance;
+            }
+            else
+            {
+                center += (Vector2)neighbor.transform.position;
+            }
+        }
+        // center += (Vector2)neighbor.transform.position;
         return ((center / neighbors.Count) - (Vector2)transform.position).normalized;
     }
 
@@ -76,7 +103,15 @@ public class BoidMovement : MonoBehaviour
         {
             if (Vector2.Distance(transform.position, neighbor.transform.position) < separationDistance)
             {
-                separation += (Vector2)(transform.position - neighbor.transform.position);
+                if (IsDistanceInfluence)
+                {
+                    float distance = Vector2.Distance(transform.position, neighbor.transform.position);
+                    separation += (Vector2)(transform.position - neighbor.transform.position) / distance;
+                }
+                else
+                {
+                    separation += (Vector2)(transform.position - neighbor.transform.position);
+                }
             }
         }
         return separation.normalized;

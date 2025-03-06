@@ -181,3 +181,4 @@ MonoBehaviour:
   alignmentWeight: 1
   cohesionWeight: 1
   separationWeight: 1.5
+  IsDistanceInfluence: 1
