@@ -18,44 +18,75 @@ public class BoidMovement3D : MonoBehaviour
         // Initialisation de la vélocité dans la direction "forward"
         velocity = transform.forward * speed;
     }
+List<BoidMovement3D> GetNeighbors()
+{
+    List<BoidMovement3D> neighbors = new List<BoidMovement3D>();
+    foreach (var boid in FindObjectsOfType<BoidMovement3D>())
+    {
+        if (boid != this && Vector3.Distance(transform.position, boid.transform.position) < neighborRadius)
+            neighbors.Add(boid);
+    }
+    return neighbors;
+}
 
     void Update()
+{
+    Vector3 acceleration = Vector3.zero;
+
+    List<BoidMovement3D> neighbors = GetNeighbors();
+    List<GameObject> obstacles = GetObstacles();
+
+    Vector3 alignment = ComputeAlignment(neighbors);
+    Vector3 cohesion = ComputeCohesion(neighbors);
+    Vector3 separation = ComputeSeparation(neighbors);
+    Vector3 avoidance = AvoidObstacles(obstacles); // Évitement des obstacles
+
+    acceleration += alignment * alignmentWeight;
+    acceleration += cohesion * cohesionWeight;
+    acceleration += separation * separationWeight;
+    acceleration += avoidance * separationWeight; // Appliquer la force d'évitement
+
+    velocity += acceleration * Time.deltaTime;
+    velocity = new Vector3(velocity.x, 0, velocity.z).normalized * speed;
+
+    transform.position += velocity * Time.deltaTime;
+
+    if (velocity.sqrMagnitude > 0.001f)
     {
-        Vector3 acceleration = Vector3.zero;
+        transform.rotation = Quaternion.LookRotation(velocity, Vector3.up);
+    }
+}
 
-        List<BoidMovement3D> neighbors = GetNeighbors();
-        Vector3 alignment = ComputeAlignment(neighbors);
-        Vector3 cohesion = ComputeCohesion(neighbors);
-        Vector3 separation = ComputeSeparation(neighbors);
 
-        acceleration += alignment * alignmentWeight;
-        acceleration += cohesion * cohesionWeight;
-        acceleration += separation * separationWeight;
-
-        velocity += acceleration * Time.deltaTime;
-        // Contrainte de la vélocité sur le plan XZ
-        velocity = new Vector3(velocity.x, 0, velocity.z).normalized * speed;
-
-        transform.position += velocity * Time.deltaTime;
-
-        // Mise à jour de la rotation pour que le boid suive sa direction de déplacement.
-        // Ici, on n'applique aucun offset car on souhaite que tout se déplace vers l'avant.
-        if (velocity.sqrMagnitude > 0.001f)
+    List<GameObject> GetObstacles()
+{
+    List<GameObject> obstacles = new List<GameObject>();
+    foreach (var obj in GameObject.FindGameObjectsWithTag("obstacle"))
+    {
+        if (Vector3.Distance(transform.position, obj.transform.position) < neighborRadius)
         {
-            transform.rotation = Quaternion.LookRotation(velocity, Vector3.up);
+            obstacles.Add(obj);
+        }
+    }
+    return obstacles;
+}
+Vector3 AvoidObstacles(List<GameObject> obstacles)
+{
+    Vector3 avoidanceForce = Vector3.zero;
+
+    foreach (var obj in obstacles)
+    {
+        float distance = Vector3.Distance(transform.position, obj.transform.position);
+        if (distance < separationDistance) // Si trop proche
+        {
+            Vector3 awayFromObstacle = (transform.position - obj.transform.position).normalized / distance;
+            avoidanceForce += awayFromObstacle;
         }
     }
 
-    List<BoidMovement3D> GetNeighbors()
-    {
-        List<BoidMovement3D> neighbors = new List<BoidMovement3D>();
-        foreach (var boid in FindObjectsOfType<BoidMovement3D>())
-        {
-            if (boid != this && Vector3.Distance(transform.position, boid.transform.position) < neighborRadius)
-                neighbors.Add(boid);
-        }
-        return neighbors;
-    }
+    return new Vector3(avoidanceForce.x, 0, avoidanceForce.z).normalized;
+}
+
 
     Vector3 ComputeAlignment(List<BoidMovement3D> neighbors)
     {
