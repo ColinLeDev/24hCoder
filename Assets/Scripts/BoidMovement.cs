@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class BoidMovement : MonoBehaviour
+public class BoidMovement3D : MonoBehaviour
 {
     public float speed = 1.5f;
     public float neighborRadius = 2f;
@@ -10,109 +10,93 @@ public class BoidMovement : MonoBehaviour
     public float cohesionWeight = 1f;
     public float separationWeight = 1.5f;
 
-    // Boid settings
     public bool IsDistanceInfluence = true;
-    /// Determines whether the distance to neighboring boids is taken into account
-    /// when calculating the influence of alignment, cohesion, and separation.
-    private Vector2 velocity;
+    public Vector3 velocity;
 
     void Start()
     {
-        // Initialisation du mouvement dans la direction du haut du prefab (l'avant)
-        velocity = transform.up * speed;
+        // Initialisation de la vélocité dans la direction "forward"
+        velocity = transform.forward * speed;
     }
 
     void Update()
     {
-        Vector2 acceleration = Vector2.zero;
+        Vector3 acceleration = Vector3.zero;
 
-        List<BoidMovement> neighbors = GetNeighbors();
-        Vector2 alignment = ComputeAlignment(neighbors);
-        Vector2 cohesion = ComputeCohesion(neighbors);
-        Vector2 separation = ComputeSeparation(neighbors);
+        List<BoidMovement3D> neighbors = GetNeighbors();
+        Vector3 alignment = ComputeAlignment(neighbors);
+        Vector3 cohesion = ComputeCohesion(neighbors);
+        Vector3 separation = ComputeSeparation(neighbors);
 
         acceleration += alignment * alignmentWeight;
         acceleration += cohesion * cohesionWeight;
         acceleration += separation * separationWeight;
 
         velocity += acceleration * Time.deltaTime;
-        velocity = velocity.normalized * speed;
+        // Contrainte de la vélocité sur le plan XZ
+        velocity = new Vector3(velocity.x, 0, velocity.z).normalized * speed;
 
-        // Déplacer le boid dans la direction du mouvement
-        transform.position += (Vector3)velocity * Time.deltaTime;
+        transform.position += velocity * Time.deltaTime;
 
-        // Faire tourner le boid pour que le haut (l'avant) suive la direction de déplacement
-        float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
+        // Mise à jour de la rotation pour que le boid suive sa direction de déplacement.
+        // Ici, on n'applique aucun offset car on souhaite que tout se déplace vers l'avant.
+        if (velocity.sqrMagnitude > 0.001f)
+        {
+            transform.rotation = Quaternion.LookRotation(velocity, Vector3.up);
+        }
     }
 
-    List<BoidMovement> GetNeighbors()
+    List<BoidMovement3D> GetNeighbors()
     {
-        List<BoidMovement> neighbors = new List<BoidMovement>();
-        foreach (var boid in FindObjectsOfType<BoidMovement>())
+        List<BoidMovement3D> neighbors = new List<BoidMovement3D>();
+        foreach (var boid in FindObjectsOfType<BoidMovement3D>())
         {
-            if (boid != this && Vector2.Distance(transform.position, boid.transform.position) < neighborRadius)
+            if (boid != this && Vector3.Distance(transform.position, boid.transform.position) < neighborRadius)
                 neighbors.Add(boid);
         }
         return neighbors;
     }
 
-    Vector2 ComputeAlignment(List<BoidMovement> neighbors)
+    Vector3 ComputeAlignment(List<BoidMovement3D> neighbors)
     {
-        if (neighbors.Count == 0) return Vector2.zero;
-        Vector2 avgVelocity = Vector2.zero;
+        if (neighbors.Count == 0)
+            return Vector3.zero;
+
+        Vector3 avgVelocity = Vector3.zero;
         foreach (var neighbor in neighbors)
         {
-            if (IsDistanceInfluence)
-            {
-                float distance = Vector2.Distance(transform.position, neighbor.transform.position);
-                avgVelocity += neighbor.velocity / distance;
-            }
-            else
-            {
-                avgVelocity += neighbor.velocity;
-            }
+            float distance = Vector3.Distance(transform.position, neighbor.transform.position);
+            avgVelocity += IsDistanceInfluence ? neighbor.velocity / distance : neighbor.velocity;
         }
-        return (avgVelocity / neighbors.Count).normalized;
+        return new Vector3(avgVelocity.x, 0, avgVelocity.z).normalized;
     }
 
-    Vector2 ComputeCohesion(List<BoidMovement> neighbors)
+    Vector3 ComputeCohesion(List<BoidMovement3D> neighbors)
     {
-        if (neighbors.Count == 0) return Vector2.zero;
-        Vector2 center = Vector2.zero;
+        if (neighbors.Count == 0)
+            return Vector3.zero;
+
+        Vector3 center = Vector3.zero;
         foreach (var neighbor in neighbors)
         {
-            if (IsDistanceInfluence)
-            {
-                float distance = Vector2.Distance(transform.position, neighbor.transform.position);
-                center += (Vector2)neighbor.transform.position / distance;
-            }
-            else
-            {
-                center += (Vector2)neighbor.transform.position;
-            }
+            float distance = Vector3.Distance(transform.position, neighbor.transform.position);
+            center += IsDistanceInfluence ? (neighbor.transform.position / distance) : neighbor.transform.position;
         }
-        return ((center / neighbors.Count) - (Vector2)transform.position).normalized;
+        Vector3 desiredPosition = (center / neighbors.Count) - transform.position;
+        return new Vector3(desiredPosition.x, 0, desiredPosition.z).normalized;
     }
 
-    Vector2 ComputeSeparation(List<BoidMovement> neighbors)
+    Vector3 ComputeSeparation(List<BoidMovement3D> neighbors)
     {
-        Vector2 separation = Vector2.zero;
+        Vector3 separation = Vector3.zero;
         foreach (var neighbor in neighbors)
         {
-            if (Vector2.Distance(transform.position, neighbor.transform.position) < separationDistance)
+            if (Vector3.Distance(transform.position, neighbor.transform.position) < separationDistance)
             {
-                if (IsDistanceInfluence)
-                {
-                    float distance = Vector2.Distance(transform.position, neighbor.transform.position);
-                    separation += (Vector2)(transform.position - neighbor.transform.position) / distance;
-                }
-                else
-                {
-                    separation += (Vector2)(transform.position - neighbor.transform.position);
-                }
+                float distance = Vector3.Distance(transform.position, neighbor.transform.position);
+                separation += IsDistanceInfluence ? (transform.position - neighbor.transform.position) / distance : (transform.position - neighbor.transform.position);
             }
         }
-        return separation.normalized;
+        return new Vector3(separation.x, 0, separation.z).normalized;
     }
 }
