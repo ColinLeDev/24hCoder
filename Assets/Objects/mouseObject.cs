@@ -1,7 +1,9 @@
 using UnityEngine;
 using UnityEngine.UIElements;
+using System.Collections;
+using UnityEngine.EventSystems;
 
-public class SpawnObjectOnClick : MonoBehaviour
+public class SpawnObjectOnClick : MonoBehaviour, IPointerClickHandler
 {
     public GameObject objectToSpawn;
     public LayerMask groundLayer;
@@ -17,15 +19,18 @@ public class SpawnObjectOnClick : MonoBehaviour
             var root = uiDocument.rootVisualElement;
 
             // Ajouter un gestionnaire d'événement de pointer (souris)
-            root.RegisterCallback<PointerEnterEvent>(evt => isPointerOverUI = true);
-            root.RegisterCallback<PointerLeaveEvent>(evt => isPointerOverUI = false);
+            root.RegisterCallback<PointerDownEvent>(evt => isPointerOverUI = true);
+            root.RegisterCallback<PointerUpEvent>(evt => isPointerOverUI = false);
+
         }
     }
+
+
     void Update()
     {
         if (Input.GetMouseButtonDown(0)) // Clic gauche
         {
-            if (!isPointerOverUI)
+            if (true)
             {
                 Vector3 spawnPosition = GetMouseWorldPosition();
                 if (spawnPosition != Vector3.zero)
@@ -41,6 +46,12 @@ public class SpawnObjectOnClick : MonoBehaviour
             }
         }
     }
+    public void OnPointerClick(PointerEventData pointerEventData)
+    {
+        //Output to console the clicked GameObject's name and the following message. You can replace this with your own actions for when clicking the GameObject.
+        Debug.Log(name + " Game Object Clicked!");
+    }
+
 
     Vector3 GetMouseWorldPosition()
     {
@@ -52,5 +63,3 @@ public class SpawnObjectOnClick : MonoBehaviour
         return Vector3.zero;
     }
 }
-
-
