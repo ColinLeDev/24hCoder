@@ -39,7 +39,7 @@ public class BoidMovement3D : MonoBehaviour
     }
 
     // Récupère les voisins dans un rayon défini
-    List<BoidMovement3D> GetNeighbors()
+    public List<BoidMovement3D> GetNeighbors()
     {
         List<BoidMovement3D> neighbors = new List<BoidMovement3D>();
         foreach (var boid in FindObjectsOfType<BoidMovement3D>())
