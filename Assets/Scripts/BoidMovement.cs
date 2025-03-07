@@ -29,6 +29,7 @@ public class BoidMovement3D : MonoBehaviour
     public Vector3 velocity;
 
     private float y;
+    public SpawnObjectOnClick ctrlObject;
 
     void Start()
     {
@@ -216,6 +217,8 @@ public class BoidMovement3D : MonoBehaviour
     // Affichage du neighborRadius dans l'éditeur
     void OnDrawGizmosSelected()
     {
+        if (!ctrlObject.showNeighborRadius)
+            return;
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, neighborRadius);
     }

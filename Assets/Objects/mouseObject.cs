@@ -12,13 +12,12 @@ public class SpawnObjectOnClick : MonoBehaviour
     private Slider speedSlider, neighborRadiusSlider, separationDistanceSlider;
     private Slider alignmentWeightSlider, cohesionWeightSlider, separationWeightSlider;
     private Slider obsAvoidanceDistanceSlider, safeDistanceSlider, obsAvoidanceWeightSlider,obsRepusionCoeffSlider, turnSpeedSlider;
-    private Toggle distanceInfluenceToggle, toggleNeighborRadius, toggleCohesionLines;
-    private EnumField modeObstacleEnumField;
+    private Toggle distanceInfluenceToggle, toggleNeighborRadius, toggleCohesionLines, toggleModeObstacle;
 
     private VisualElement draggableWindow;
     private Vector2 dragOffset;
     private bool isDragging = false;
-    private bool canSpawn = true;
+    public bool canSpawn = true;
     public float speed = 1.5f;
     public float neighborRadius = 2f;
     public float separationDistance = 1f;
@@ -32,7 +31,7 @@ public class SpawnObjectOnClick : MonoBehaviour
     public float turnSpeed = 360f;
     public bool cohesionLines = false;
     public bool showNeighborRadius = false;
-    public ModeEnum modeObstacle = ModeEnum.BOID;
+    public bool modeObstacle = false;
     public bool IsDistanceInfluence = true;
     private void OnEnable()
     {
@@ -63,7 +62,7 @@ public class SpawnObjectOnClick : MonoBehaviour
         turnSpeedSlider = root.Q<Slider>("turnSpeedSlider");
         toggleNeighborRadius = root.Q<Toggle>("toggleNeighborRadius");
         toggleCohesionLines = root.Q<Toggle>("toggleCohesionLines");
-        modeObstacleEnumField = root.Q<EnumField>("Mode obstacle");
+        toggleModeObstacle = root.Q<Toggle>("toggleModeObstacle");
         distanceInfluenceToggle = root.Q<Toggle>("distanceInfluenceToggle");
 
         // Initialisation des valeurs
@@ -80,7 +79,7 @@ public class SpawnObjectOnClick : MonoBehaviour
         turnSpeedSlider.value = turnSpeed;
         toggleNeighborRadius.value = showNeighborRadius;
         toggleCohesionLines.value = cohesionLines;
-        modeObstacleEnumField.Init(modeObstacle);
+        toggleModeObstacle.value = modeObstacle;
         distanceInfluenceToggle.value = IsDistanceInfluence;
 
         // Gestion des événements pour mettre à jour les valeurs
@@ -97,7 +96,7 @@ public class SpawnObjectOnClick : MonoBehaviour
         turnSpeedSlider.RegisterValueChangedCallback(evt => turnSpeed = evt.newValue);
         toggleNeighborRadius.RegisterValueChangedCallback(evt => showNeighborRadius = evt.newValue);
         toggleCohesionLines.RegisterValueChangedCallback(evt => cohesionLines = evt.newValue);
-        modeObstacleEnumField.RegisterValueChangedCallback(evt => modeObstacle = (ModeEnum)evt.newValue);
+        toggleModeObstacle.RegisterValueChangedCallback(evt => modeObstacle = evt.newValue);
         distanceInfluenceToggle.RegisterValueChangedCallback(evt => IsDistanceInfluence = evt.newValue);
 
         // Ajout du drag
@@ -130,8 +129,7 @@ public class SpawnObjectOnClick : MonoBehaviour
     }
     void Update()
     {
-        Debug.Log(modeObstacle);
-        if (Input.GetMouseButtonDown(0) && canSpawn) // Clic gauche
+        if (Input.GetMouseButtonDown(0) && canSpawn && !modeObstacle) // Clic gauche
         {
             Vector3 spawnPosition = GetMouseWorldPosition();
             if (spawnPosition != Vector3.zero)
