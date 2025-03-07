@@ -213,4 +213,10 @@ public class BoidMovement3D : MonoBehaviour
         }
         return new Vector3(separation.x, 0, separation.z).normalized;
     }
+    // Affichage du neighborRadius dans l'éditeur
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, neighborRadius);
+    }
 }
