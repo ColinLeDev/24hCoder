@@ -13,6 +13,9 @@ public class SpawnObjectOnClick : MonoBehaviour
     private Toggle distanceInfluenceToggle;
 
     private VisualElement draggableWindow;
+    private Vector2 dragOffset;
+    private bool isDragging = false;
+    private bool canSpawn = true;
     public float speed = 1.5f;
     public float neighborRadius = 2f;
     public float separationDistance = 1f;
@@ -63,39 +66,54 @@ public class SpawnObjectOnClick : MonoBehaviour
         distanceInfluenceToggle.RegisterValueChangedCallback(evt => IsDistanceInfluence = evt.newValue);
 
         // Ajout du drag
-        // draggableWindow.RegisterCallback<PointerDownEvent>(OnPointerDown);
-        // draggableWindow.RegisterCallback<PointerMoveEvent>(OnPointerMove);
-        // draggableWindow.RegisterCallback<PointerUpEvent>(OnPointerUp);
+        draggableWindow.RegisterCallback<PointerDownEvent>(OnPointerDown);
+        draggableWindow.RegisterCallback<PointerMoveEvent>(OnPointerMove);
+        draggableWindow.RegisterCallback<PointerUpEvent>(OnPointerUp);
+
+        // Ajout de la détection de l'entrée dans l'objet (hover)
+        draggableWindow.RegisterCallback<MouseEnterEvent>(evt => canSpawn = false);
+        draggableWindow.RegisterCallback<MouseLeaveEvent>(evt => canSpawn = true);
     }
-    private void OnGlobalClick(PointerDownEvent evt)
+    private void OnPointerDown(PointerDownEvent evt)
     {
-        Debug.Log("Clic détecté à la position : " + evt.position);
-        if (draggableWindow.worldBound.Contains(evt.position))
+        isDragging = true;
+        dragOffset = (Vector2)evt.position - draggableWindow.layout.position;
+    }
+
+    private void OnPointerMove(PointerMoveEvent evt)
+    {
+        if (isDragging)
         {
-            Debug.Log("Click sur la fenêtre");
+            draggableWindow.style.left = evt.position.x - dragOffset.x;
+            draggableWindow.style.top = evt.position.y - dragOffset.y;
         }
-        else
+    }
+
+    private void OnPointerUp(PointerUpEvent evt)
+    {
+        isDragging = false;
+    }
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0) && canSpawn) // Clic gauche
         {
-            Debug.Log("Click global");
             Vector3 spawnPosition = GetMouseWorldPosition();
             if (spawnPosition != Vector3.zero)
             {
                 Quaternion rotation = Quaternion.Euler(0, 0, 0); // Appliquer une rotation de -90° sur X
-                Instantiate(objectToSpawn, spawnPosition + new Vector3(0, 5, 0), rotation);
-            }
-        }
-    }
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0)) // Clic gauche
-        {
-            if (EventSystem.current.IsPointerOverGameObject()) // Vérifie si le clic est sur un élément UI
-            {
-                Debug.Log("Clic sur un élément UI");
-            }
-            else
-            {
-                Debug.Log("Clic en dehors de l'UI");
+
+                var newObj = Instantiate(objectToSpawn, spawnPosition + new Vector3(0, 5, 0), rotation);
+                BoidMovement3D boidMovement = newObj.GetComponent<BoidMovement3D>();
+                if (boidMovement != null)
+                {
+                    boidMovement.speed = speed;
+                    boidMovement.neighborRadius = neighborRadius;
+                    boidMovement.separationDistance = separationDistance;
+                    boidMovement.alignmentWeight = alignmentWeight;
+                    boidMovement.cohesionWeight = cohesionWeight;
+                    boidMovement.separationWeight = separationWeight;
+                    boidMovement.IsDistanceInfluence = IsDistanceInfluence;
+                }
             }
         }
     }
