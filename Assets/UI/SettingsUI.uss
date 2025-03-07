@@ -1,5 +1,21 @@
-.custom-label {
+.SettingsUI {
     font-size: 20px;
     -unity-font-style: bold;
     color: rgb(68, 138, 255);
+    background-color: rgba(11, 11, 11, 0.84);
+}
+
+.slider-number {
+}
+
+.slider #unity-text-input {
+    color: rgb(0, 0, 0);
+}
+
+.slider {
+    color: rgb(215, 215, 215);
+}
+
+.slider {
+    color: rgb(215, 215, 215);
 }
