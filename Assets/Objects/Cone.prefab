@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8670638128295865691}
   - component: {fileID: 1002777220250124930}
-  - component: {fileID: -4966262486333905783}
   - component: {fileID: 4849697814301912708}
   m_Layer: 3
   m_Name: Cone
@@ -47,33 +46,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e7d430b8a90f48a0b4bfa8d9d092e48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8.91
-  neighborRadius: 18.61
-  separationDistance: 5.12
-  alignmentWeight: 54.9
-  cohesionWeight: 295.6
-  separationWeight: 163.9
-  obstacleAvoidanceDistance: 62.25
-  safeDistance: 16.12
-  obstacleAvoidanceWeight: 192.1
-  obstacleRepulsionCoefficient: 256.1
-  turnSpeed: 360
-  maxAcceleration: 5
+  speed: 1.54
+  neighborRadius: 2
+  separationDistance: 1
+  alignmentWeight: 1
+  cohesionWeight: 1
+  separationWeight: 1.5
   IsDistanceInfluence: 1
   velocity: {x: 0, y: 0, z: 0}
---- !u!114 &-4966262486333905783
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 704190016111770993}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6146dc3280358a48b58b91acbf4a9fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ground: {fileID: 4554915990021416576, guid: 021d1be417b786b4ab5cec244809a26e, type: 3}
 --- !u!54 &4849697814301912708
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -104,62 +84,6 @@ Rigidbody:
 --- !u!1001 &7005351118772329027
 PrefabInstance:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 704190016111770993}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.8880111, y: 1, z: 2.0726624}
-  m_Center: {x: -0.027972758, y: 0, z: -0.04526329}
---- !u!114 &-7827006619662354399
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 704190016111770993}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 454427eb7ece344ac95b768985138803, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetHeight: 5
---- !u!1 &1185752422197305291
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7981096476929363184}
-  - component: {fileID: 5050122505866261946}
-  - component: {fileID: 8588392563533025582}
-  m_Layer: 2
-  m_Name: default
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7981096476929363184
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1185752422197305291}
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
