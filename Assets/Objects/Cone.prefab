@@ -65,6 +65,7 @@ MonoBehaviour:
   maxAcceleration: 5
   IsDistanceInfluence: 1
   velocity: {x: 0, y: 0, z: 0}
+  ctrlObject: {fileID: 1104472100502479027, guid: 22243fc19c2319e4e86afbbc37728b32, type: 3}
 --- !u!114 &6837763472249594302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,6 +78,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f5f387b855eb455997bef9e8b256836, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ctrlObject: {fileID: 1104472100502479027, guid: 22243fc19c2319e4e86afbbc37728b32, type: 3}
   segments: 64
   circleColor: {r: 1, g: 1, b: 0, a: 0.5}
   lineWidth: 0.05
@@ -252,6 +254,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c92dad3e717e143f98bd8c4469bf1816, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  circleSegments: 64
+  circleColor: {r: 1, g: 1, b: 0, a: 0.5}
+  circleLineWidth: 0.05
+  cohesionLineColor: {r: 0, g: 1, b: 0, a: 0.8}
+  cohesionLineWidth: 0.05
 --- !u!1001 &7005351118772329027
 PrefabInstance:
   m_ObjectHideFlags: 0

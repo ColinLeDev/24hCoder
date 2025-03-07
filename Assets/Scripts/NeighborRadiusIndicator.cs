@@ -6,6 +6,7 @@ public class NeighborRadiusCircle : MonoBehaviour
 {
     private BoidMovement3D boidMovement;
     private LineRenderer lineRenderer;
+    public SpawnObjectOnClick ctrlObject;
     
     // Nombre de segments pour dessiner le cercle (plus c'est élevé, plus le cercle sera lisse)
     public int segments = 64;
@@ -35,6 +36,8 @@ public class NeighborRadiusCircle : MonoBehaviour
     void Update()
     {
         if (boidMovement == null)
+            return;
+        if (!ctrlObject.showNeighborRadius)
             return;
             
         float radius = boidMovement.neighborRadius;

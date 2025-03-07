@@ -6,39 +6,53 @@ public class MouseFollower : MonoBehaviour
     public GameObject objectPrefab;   // L'objet à cloner lors du clic
     public LayerMask groundLayer;     // Le layer du sol
     private Material objectMaterial;  // Matériau de l'objet suivi
-        void Start()
+    public SpawnObjectOnClick ctrlObject;
+    void Start()
     {
         // Récupère une copie du matériau pour éviter les conflits
         objectMaterial = objectToFollow.GetComponent<Renderer>().material;
         SetTransparency(objectMaterial, true); // Rendre l'objet transparent au début
     }
-void Update()
-{
-    // Déplacer l'objet pour suivre la souris
-    MoveObjectToMousePosition();
-
-    // Cloner l'objet au clic gauche
-    if (Input.GetMouseButtonDown(0))
+    void Update()
     {
-        GameObject newClone = Instantiate(objectPrefab, objectToFollow.transform.position, objectToFollow.transform.rotation);
-        newClone.tag = "obstacle"; // Assigne le tag "Obstacle" au clone
-        // Applique le même scale que l'objet qui suit la souris
-    newClone.transform.localScale = objectToFollow.transform.localScale;
-        Material cloneMaterial = newClone.GetComponent<Renderer>().material;
-        SetTransparency(cloneMaterial, false);
+        if (ctrlObject.modeObstacle)
+        {
+            Vector3 pos = objectToFollow.transform.position;
+            pos.y = 0;
+            objectToFollow.transform.position = pos;
+            SetTransparency(objectMaterial, false); // Rendre l'objet visible
+            // Déplacer l'objet pour suivre la souris
+            MoveObjectToMousePosition();
+
+            // Cloner l'objet au clic gauche
+            if (Input.GetMouseButtonDown(0) && ctrlObject.canSpawn)
+            {
+                GameObject newClone = Instantiate(objectPrefab, objectToFollow.transform.position, objectToFollow.transform.rotation);
+                newClone.tag = "obstacle"; // Assigne le tag "Obstacle" au clone
+                                           // Applique le même scale que l'objet qui suit la souris
+                newClone.transform.localScale = objectToFollow.transform.localScale;
+                Material cloneMaterial = newClone.GetComponent<Renderer>().material;
+                SetTransparency(cloneMaterial, false);
+            }
+
+            // Rotation de l'objet à 45° en appuyant sur "R"
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                RotateObject();
+            }
+        }
+        else
+        {
+            Vector3 pos = objectToFollow.transform.position;
+            pos.y = -5;
+            objectToFollow.transform.position = pos;
+        }
     }
 
-    // Rotation de l'objet à 45° en appuyant sur "R"
-    if (Input.GetKeyDown(KeyCode.R))
+    void RotateObject()
     {
-        RotateObject();
+        objectToFollow.transform.Rotate(0, 45, 0); // Rotation de 45° sur Y
     }
-}
-
-void RotateObject()
-{
-    objectToFollow.transform.Rotate(0, 45, 0); // Rotation de 45° sur Y
-}
 
     void MoveObjectToMousePosition()
     {
@@ -60,7 +74,7 @@ void RotateObject()
         Material cloneMaterial = newClone.GetComponent<Renderer>().material;
         SetTransparency(cloneMaterial, false);
     }
-   void SetTransparency(Material material, bool transparent)
+    void SetTransparency(Material material, bool transparent)
     {
         Color color = material.color;
         if (transparent)
@@ -89,5 +103,18 @@ void RotateObject()
             material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
             material.renderQueue = -1;
         }
+    }
+    void Hide(Material material){
+        Color color = material.color;
+        color.a = 0.01f;
+        material.color = color;
+        material.SetFloat("_Mode", 3); // Mode Transparent
+        material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        material.SetInt("_ZWrite", 0);
+        material.DisableKeyword("_ALPHATEST_ON");
+        material.EnableKeyword("_ALPHABLEND_ON");
+        material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+        material.renderQueue = 3000;
     }
 }
