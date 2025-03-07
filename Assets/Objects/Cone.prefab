@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 8670638128295865691}
   - component: {fileID: 1002777220250124930}
   - component: {fileID: 4849697814301912708}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cone
-  m_TagString: Untagged
+  m_TagString: Cone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e7d430b8a90f48a0b4bfa8d9d092e48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1.5
+  speed: 1.54
   neighborRadius: 2
   separationDistance: 1
   alignmentWeight: 1
@@ -132,6 +132,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: a1b04a6d88bc14b41b08ff475b97682b, type: 3}
       propertyPath: m_Name
       value: cone
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a1b04a6d88bc14b41b08ff475b97682b, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: a1b04a6d88bc14b41b08ff475b97682b, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
