@@ -354,7 +354,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rayLength: 10
-  groundHeight: 1.5
+  groundHeight: 1
   coneLayer:
     serializedVersion: 2
     m_Bits: 12

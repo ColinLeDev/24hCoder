@@ -1,25 +1,22 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements">
-  <ui:VisualElement name="DraggableWindow" style="width: 300px; height: 400px; background-color: #333; padding: 10px; border-radius: 5px;">
-    <ui:Label text="Paramètres" style="color: white; font-size: 16px; text-align: center; margin-bottom: 10px;"/>
-    
-    <ui:Slider name="speedSlider" low-value="0" high-value="5"/>
-    <ui:Label name="speedLabel" text="Speed: 1.5"/>
-
-    <ui:Slider name="neighborRadiusSlider" low-value="0" high-value="5"/>
-    <ui:Label name="neighborRadiusLabel" text="Neighbor Radius: 2"/>
-
-    <ui:Slider name="separationDistanceSlider" low-value="0" high-value="5"/>
-    <ui:Label name="separationDistanceLabel" text="Separation Distance: 1"/>
-
-    <ui:Slider name="alignmentWeightSlider" low-value="0" high-value="5"/>
-    <ui:Label name="alignmentWeightLabel" text="Alignment Weight: 1"/>
-
-    <ui:Slider name="cohesionWeightSlider" low-value="0" high-value="5"/>
-    <ui:Label name="cohesionWeightLabel" text="Cohesion Weight: 1"/>
-
-    <ui:Slider name="separationWeightSlider" low-value="0" high-value="5"/>
-    <ui:Label name="separationWeightLabel" text="Separation Weight: 1.5"/>
-
-    <ui:Toggle name="distanceInfluenceToggle" text="Distance Influence"/>
-  </ui:VisualElement>
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/SettingsUI.uss?fileID=7433441132597879392&amp;guid=73988fd677af85c4e9e038c2493b5d91&amp;type=3#SettingsUI" />
+    <ui:VisualElement name="DraggableWindow" style="width: 382px; height: 718px; background-color: rgb(51, 51, 51); padding: 10px; border-radius: 5px;">
+        <ui:Label text="Paramètres" style="color: white; font-size: 16px; text-align: center; margin-bottom: 10px; align-self: center; -unity-font-style: bold;" />
+        <ui:Slider name="speedSlider" low-value="0" high-value="6" view-data-key="Vitesse" fill="true" value="2" show-input-field="true" label="Vitesse" class="slider" />
+        <ui:Slider name="maxAccelerationSlider" low-value="0" high-value="5" label="maxAcceleration" value="1" fill="true" show-input-field="true" class="slider" />
+        <ui:Slider name="neighborRadiusSlider" low-value="3" high-value="20" label="neighborRadius" value="5" fill="true" show-input-field="true" class="slider" />
+        <ui:Slider name="separationDistanceSlider" low-value="1" high-value="5" show-input-field="true" label="separationDistance" fill="true" value="2" inverted="false" class="slider" />
+        <ui:Label name="menuComportementLabel" text="Poids des comportements" style="align-self: center; color: rgb(255, 255, 255);" />
+        <ui:Slider name="alignmentWeightSlider" low-value="0" high-value="5" label="alignmentWeight" value="1" fill="true" show-input-field="true" class="slider" />
+        <ui:Slider name="cohesionWeightSlider" low-value="50" high-value="200" label="cohesionWeight" value="50" fill="true" show-input-field="true" page-size="15" class="slider" />
+        <ui:Slider name="separationWeightSlider" low-value="50" high-value="300" label="separationWeight" value="100" page-size="15" fill="true" show-input-field="true" class="slider" />
+        <ui:Label name="MenuObstacleLabel" text="Évitement d&apos;obstacles" style="align-self: center; color: rgb(255, 255, 255);" />
+        <ui:Slider name="obsAvoidanceDistanceSlider" low-value="6" high-value="50" label="obsAvoidanceDistance" value="1" fill="true" show-input-field="true" page-size="2" class="slider" />
+        <ui:Slider name="safeDistanceSlider" low-value="0" high-value="5" label="safeDistance" value="0.5" fill="true" show-input-field="true" page-size="0.5" class="slider" />
+        <ui:Slider name="obsAvoidanceWeightSlider" low-value="0" high-value="20" label="obsAvoidanceWeight" value="100" page-size="1" fill="true" show-input-field="true" class="slider" />
+        <ui:Slider name="obsRepusionCoeffSlider" low-value="100" high-value="500" label="obsRepusionCoeff" value="100" page-size="25" fill="true" show-input-field="true" class="slider" />
+        <ui:Label name="MenuRotationLabel" text="Rotation" style="align-self: center; color: rgb(255, 255, 255);" />
+        <ui:Slider name="turnSpeedSlider" low-value="200" high-value="400" label="Turn Speed" value="360" fill="true" show-input-field="true" page-size="10" class="slider" />
+        <ui:Toggle name="distanceInfluenceToggle" text="Distance Influence" class="slider" style="justify-content: center; align-self: center;" />
+    </ui:VisualElement>
 </ui:UXML>
