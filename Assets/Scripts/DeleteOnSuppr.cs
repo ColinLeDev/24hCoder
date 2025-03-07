@@ -3,6 +3,7 @@ using UnityEngine;
 public class RaycastDeleteOnDeleteKey : MonoBehaviour
 {
     public float rayLength = 10f; // Longueur du rayon
+    public float groundHeight = 5f; // Sol
     public LayerMask coneLayer; // Layer de l'objet Cone
     public LayerMask groundLayer;
 
@@ -13,7 +14,7 @@ public class RaycastDeleteOnDeleteKey : MonoBehaviour
         {
             // Get les coordonnées du curseur de la souris
             Vector3 mousePosition = GetMouseWorldPosition();
-            mousePosition.y = 5f;
+            mousePosition.y = groundHeight;
             Debug.Log(mousePosition);
             // Cherche un objet avec un tag "Cone" très proche de la position de la souris, sans ray
             Collider[] colliders = Physics.OverlapSphere(mousePosition, 0.1f, coneLayer);

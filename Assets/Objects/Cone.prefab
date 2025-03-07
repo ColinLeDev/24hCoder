@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 8670638128295865691}
   - component: {fileID: 1002777220250124930}
   - component: {fileID: 4849697814301912708}
-  m_Layer: 3
+  - component: {fileID: -9035749166434276261}
+  - component: {fileID: -8973879874514261456}
+  m_Layer: 2
   m_Name: Cone
   m_TagString: Cone
   m_Icon: {fileID: 0}
@@ -52,6 +54,12 @@ MonoBehaviour:
   alignmentWeight: 1
   cohesionWeight: 1
   separationWeight: 1.5
+  obstacleAvoidanceDistance: 10
+  safeDistance: 0.5
+  obstacleAvoidanceWeight: 2
+  obstacleRepulsionCoefficient: 100
+  turnSpeed: 360
+  maxAcceleration: 5
   IsDistanceInfluence: 1
   velocity: {x: 0, y: 0, z: 0}
 --- !u!54 &4849697814301912708
@@ -81,6 +89,32 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-9035749166434276261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 704190016111770993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6146dc3280358a48b58b91acbf4a9fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ground: {fileID: 4554915990021416576, guid: 021d1be417b786b4ab5cec244809a26e, type: 3}
+--- !u!114 &-8973879874514261456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 704190016111770993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 454427eb7ece344ac95b768985138803, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetHeight: 1
 --- !u!1001 &7005351118772329027
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -135,11 +169,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a1b04a6d88bc14b41b08ff475b97682b, type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8164078558771037576, guid: a1b04a6d88bc14b41b08ff475b97682b, type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
