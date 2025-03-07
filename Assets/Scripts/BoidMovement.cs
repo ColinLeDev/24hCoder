@@ -28,10 +28,14 @@ public class BoidMovement3D : MonoBehaviour
     public bool IsDistanceInfluence = true;
     public Vector3 velocity;
 
+    private float y;
+
     void Start()
     {
         // Initialisation avec la direction forward du transform
         velocity = transform.forward * speed;
+
+        y = transform.position.y;
     }
 
     // Récupère les voisins dans un rayon défini
@@ -107,67 +111,67 @@ public class BoidMovement3D : MonoBehaviour
     }
 
     void Update()
+{
+    // Forcer le y à rester constant (pour rester sur le plan horizontal)
+    transform.position = new Vector3(transform.position.x, y, transform.position.z);
+
+    Vector3 acceleration = Vector3.zero;
+    Collider boidCollider = GetComponent<Collider>();
+    float boidSize = (boidCollider != null) ? boidCollider.bounds.extents.magnitude : 0f;
+
+    List<BoidMovement3D> neighbors = GetNeighbors();
+    List<GameObject> obstacles = GetObstacles();
+
+    Vector3 alignment = ComputeAlignment(neighbors);
+    Vector3 cohesion = ComputeCohesion(neighbors);
+    Vector3 separation = ComputeSeparation(neighbors);
+    Vector3 avoidance = AvoidObstacles(obstacles);
+
+    // Détecter si un obstacle est dans la zone d'urgence
+    bool emergency = false;
+    foreach (var obj in obstacles)
     {
-        Vector3 acceleration = Vector3.zero;
-        Collider boidCollider = GetComponent<Collider>();
-        float boidSize = (boidCollider != null) ? boidCollider.bounds.extents.magnitude : 0f;
-
-        List<BoidMovement3D> neighbors = GetNeighbors();
-        List<GameObject> obstacles = GetObstacles();
-
-        Vector3 alignment = ComputeAlignment(neighbors);
-        Vector3 cohesion = ComputeCohesion(neighbors);
-        Vector3 separation = ComputeSeparation(neighbors);
-        Vector3 avoidance = AvoidObstacles(obstacles);
-
-        // Détecter si un obstacle est dans la zone d'urgence
-        bool emergency = false;
-        foreach (var obj in obstacles)
+        Collider col = obj.GetComponent<Collider>();
+        if (col != null)
         {
-            Collider col = obj.GetComponent<Collider>();
-            if (col != null)
+            Vector3 closestPoint = col.ClosestPoint(transform.position);
+            float effectiveDistance = Vector3.Distance(transform.position, closestPoint) - boidSize;
+            if (effectiveDistance < safeDistance)
             {
-                Vector3 closestPoint = col.ClosestPoint(transform.position);
-                float effectiveDistance = Vector3.Distance(transform.position, closestPoint) - boidSize;
-                if (effectiveDistance < safeDistance)
-                {
-                    emergency = true;
-                    break;
-                }
+                emergency = true;
+                break;
             }
         }
-
-        if (emergency)
-        {
-            // Au lieu d'un demi-tour brutal, on effectue une rotation naturelle en blendant la direction actuelle et la direction d'évitement.
-            Vector3 desiredDirection = Vector3.Slerp(velocity.normalized, avoidance.normalized, 0.8f);
-            Vector3 desiredVelocity = desiredDirection * speed;
-            Vector3 steering = desiredVelocity - velocity;
-            steering = Vector3.ClampMagnitude(steering, maxAcceleration);
-            acceleration = steering;
-        }
-        else
-        {
-            // Combinaison des forces classiques
-            acceleration += alignment * alignmentWeight;
-            acceleration += cohesion * cohesionWeight;
-            acceleration += separation * separationWeight;
-            acceleration += avoidance * obstacleAvoidanceWeight;
-            acceleration = Vector3.ClampMagnitude(acceleration, maxAcceleration);
-        }
-
-        velocity += acceleration * Time.deltaTime;
-        // Contrainte sur le plan XZ
-        velocity = new Vector3(velocity.x, 0, velocity.z).normalized * speed;
-        transform.position += velocity * Time.deltaTime;
-
-        // Rotation fluide pour suivre la direction du mouvement
-        if (velocity.sqrMagnitude > 0.001f)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(velocity, Vector3.up);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
-        }
     }
+
+    if (emergency)
+    {
+        Vector3 desiredDirection = Vector3.Slerp(velocity.normalized, avoidance.normalized, 0.8f);
+        Vector3 desiredVelocity = desiredDirection * speed;
+        Vector3 steering = desiredVelocity - velocity;
+        steering = Vector3.ClampMagnitude(steering, maxAcceleration);
+        acceleration = steering;
+    }
+    else
+    {
+        acceleration += alignment * alignmentWeight;
+        acceleration += cohesion * cohesionWeight;
+        acceleration += separation * separationWeight;
+        acceleration += avoidance * obstacleAvoidanceWeight;
+        acceleration = Vector3.ClampMagnitude(acceleration, maxAcceleration);
+    }
+
+    velocity += acceleration * Time.deltaTime;
+    // Contrainte sur le plan XZ
+    velocity = new Vector3(velocity.x, 0, velocity.z).normalized * speed;
+    transform.position += velocity * Time.deltaTime;
+
+    if (velocity.sqrMagnitude > 0.001f)
+    {
+        Quaternion targetRotation = Quaternion.LookRotation(velocity, Vector3.up);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
+    }
+}
 
     Vector3 ComputeAlignment(List<BoidMovement3D> neighbors)
     {
