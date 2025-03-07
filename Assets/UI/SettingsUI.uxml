@@ -1,0 +1,25 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+  <ui:VisualElement name="DraggableWindow" style="width: 300px; height: 400px; background-color: #333; padding: 10px; border-radius: 5px;">
+    <ui:Label text="Paramètres" style="color: white; font-size: 16px; text-align: center; margin-bottom: 10px;"/>
+    
+    <ui:Slider name="speedSlider" low-value="0" high-value="5"/>
+    <ui:Label name="speedLabel" text="Speed: 1.5"/>
+
+    <ui:Slider name="neighborRadiusSlider" low-value="0" high-value="5"/>
+    <ui:Label name="neighborRadiusLabel" text="Neighbor Radius: 2"/>
+
+    <ui:Slider name="separationDistanceSlider" low-value="0" high-value="5"/>
+    <ui:Label name="separationDistanceLabel" text="Separation Distance: 1"/>
+
+    <ui:Slider name="alignmentWeightSlider" low-value="0" high-value="5"/>
+    <ui:Label name="alignmentWeightLabel" text="Alignment Weight: 1"/>
+
+    <ui:Slider name="cohesionWeightSlider" low-value="0" high-value="5"/>
+    <ui:Label name="cohesionWeightLabel" text="Cohesion Weight: 1"/>
+
+    <ui:Slider name="separationWeightSlider" low-value="0" high-value="5"/>
+    <ui:Label name="separationWeightLabel" text="Separation Weight: 1.5"/>
+
+    <ui:Toggle name="distanceInfluenceToggle" text="Distance Influence"/>
+  </ui:VisualElement>
+</ui:UXML>

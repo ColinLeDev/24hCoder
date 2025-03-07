@@ -5,11 +5,12 @@ TagManager:
   serializedVersion: 3
   tags:
   - obstacle
+  - Cone
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Cone
   - Water
   - UI
   - n
