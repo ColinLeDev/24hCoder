@@ -8,10 +8,17 @@
 .slider-number {
 }
 
-.slider #unity-text-input {
-    color: rgb(0, 0, 0);
-}
-
 .slider {
     color: rgb(215, 215, 215);
+}
+
+.slider #unity-text-input {
+    color: rgb(255, 255, 255);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.15);
+    -unity-text-align: middle-center;
+    justify-content: flex-start;
+    align-self: auto;
+    align-content: auto;
+    flex-direction: column;
 }
