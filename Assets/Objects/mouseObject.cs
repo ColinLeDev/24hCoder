@@ -60,8 +60,8 @@ public class SpawnObjectOnClick : MonoBehaviour
         obsAvoidanceWeightSlider = root.Q<Slider>("obsAvoidanceWeightSlider");
         obsRepusionCoeffSlider = root.Q<Slider>("obsRepusionCoeffSlider");
         turnSpeedSlider = root.Q<Slider>("turnSpeedSlider");
-        toggleNeighborRadius = root.Q<Toggle>("toggleNeighborRadius");
-        toggleCohesionLines = root.Q<Toggle>("toggleCohesionLines");
+        // toggleNeighborRadius = root.Q<Toggle>("toggleNeighborRadius");
+        // toggleCohesionLines = root.Q<Toggle>("toggleCohesionLines");
         toggleModeObstacle = root.Q<Toggle>("toggleModeObstacle");
         distanceInfluenceToggle = root.Q<Toggle>("distanceInfluenceToggle");
 
@@ -77,8 +77,8 @@ public class SpawnObjectOnClick : MonoBehaviour
         obsAvoidanceWeightSlider.value = obstacleAvoidanceWeight;
         obsRepusionCoeffSlider.value = obstacleRepulsionCoefficient;
         turnSpeedSlider.value = turnSpeed;
-        toggleNeighborRadius.value = showNeighborRadius;
-        toggleCohesionLines.value = cohesionLines;
+        // toggleNeighborRadius.value = showNeighborRadius;
+        // toggleCohesionLines.value = cohesionLines;
         toggleModeObstacle.value = modeObstacle;
         distanceInfluenceToggle.value = IsDistanceInfluence;
 
@@ -94,8 +94,8 @@ public class SpawnObjectOnClick : MonoBehaviour
         obsAvoidanceWeightSlider.RegisterValueChangedCallback(evt => obstacleAvoidanceWeight = evt.newValue);
         obsRepusionCoeffSlider.RegisterValueChangedCallback(evt => obstacleRepulsionCoefficient = evt.newValue);
         turnSpeedSlider.RegisterValueChangedCallback(evt => turnSpeed = evt.newValue);
-        toggleNeighborRadius.RegisterValueChangedCallback(evt => showNeighborRadius = evt.newValue);
-        toggleCohesionLines.RegisterValueChangedCallback(evt => cohesionLines = evt.newValue);
+        // toggleNeighborRadius.RegisterValueChangedCallback(evt => showNeighborRadius = evt.newValue);
+        // toggleCohesionLines.RegisterValueChangedCallback(evt => cohesionLines = evt.newValue);
         toggleModeObstacle.RegisterValueChangedCallback(evt => modeObstacle = evt.newValue);
         distanceInfluenceToggle.RegisterValueChangedCallback(evt => IsDistanceInfluence = evt.newValue);
 
@@ -147,6 +147,11 @@ public class SpawnObjectOnClick : MonoBehaviour
                     boidMovement.cohesionWeight = cohesionWeight;
                     boidMovement.separationWeight = separationWeight;
                     boidMovement.IsDistanceInfluence = IsDistanceInfluence;
+                    boidMovement.obstacleAvoidanceDistance = obstacleAvoidanceDistance;
+                    boidMovement.safeDistance = safeDistance;
+                    boidMovement.obstacleAvoidanceWeight = obstacleAvoidanceWeight;
+                    boidMovement.obstacleRepulsionCoefficient = obstacleRepulsionCoefficient;
+                    boidMovement.turnSpeed = turnSpeed;
                 }
             }
         }
